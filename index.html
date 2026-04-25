@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sophfree Automation — AI in your corner</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e1420;
+    --surface: #111826;
+    --surface2: #141d2e;
+    --border: #1e2a40;
+    --border-light: #2d3f58;
+    --text: #f0ece6;
+    --text-mid: #c8c2b8;
+    --text-dim: #8a96a8;
+    --gold: #c9a96e;
+    --gold-light: #e0c898;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 28px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background: rgba(14,20,32,0.97);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .logo .free {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+    text-transform: none;
+    letter-spacing: 0.04em;
+    font-size: 17px;
+  }
+
+  .logo .sub {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: #7a8699;
+    margin-top: 3px;
+    font-weight: 300;
+    text-transform: uppercase;
+  }
+
+  .header-cta {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 10px 24px;
+    background: var(--gold);
+    color: var(--bg);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .header-cta:hover { opacity: 0.8; }
+
+  .hero {
+    padding: 96px 48px 80px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: end;
+    animation: fadeUp 0.9s ease forwards;
+  }
+
+  .hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-label::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero h1 {
+    font-size: clamp(42px, 5.5vw, 72px);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .hero h1 em { font-style: italic; color: var(--gold); }
+  .hero-right { padding-bottom: 8px; }
+
+  .hero-desc {
+    font-size: 16px;
+    color: var(--text-mid);
+    line-height: 1.85;
+    font-family: 'DM Mono', monospace;
+    font-weight: 300;
+    margin-bottom: 40px;
+  }
+
+  .hero-stats { display: flex; gap: 40px; }
+
+  .stat {
+    border-left: 2px solid var(--border-light);
+    padding-left: 20px;
+  }
+
+  .stat-number {
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-mid);
+    margin-top: 2px;
+  }
+
+  .ai-band-wrap { position: relative; }
+
+  .ai-band-wrap::before {
+    content: '';
+    display: block;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-light) 15%, var(--gold) 50%, var(--border-light) 85%, transparent);
+  }
+
+  .glow-top {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    height: 200px;
+    background: radial-gradient(ellipse at top, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 40%, transparent 70%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .ai-band {
+    padding: 80px 48px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 64px;
+    align-items: center;
+    animation: fadeUp 0.7s ease 0.05s both;
+    position: relative;
+    z-index: 1;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.018) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  .ai-band-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .ai-band h2 {
+    font-size: clamp(28px, 3vw, 42px);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    color: var(--text);
+  }
+
+  .ai-band h2 em { font-style: italic; color: var(--gold); }
+
+  .ai-band-body {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.95;
+    font-weight: 300;
+  }
+
+  .ai-band-body strong { color: var(--text); font-weight: 400; }
+
+  .what-section {
+    padding: 80px 48px;
+    border-bottom: 1px solid var(--border);
+    max-width: 800px;
+    animation: fadeUp 0.7s ease 0.1s both;
+  }
+
+  .section-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    margin-bottom: 24px;
+  }
+
+  .what-section p {
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+
+  .what-section p:last-child { margin-bottom: 0; }
+
+  .examples-section {
+    padding: 80px 48px;
+    border-bottom: 1px solid var(--border);
+    animation: fadeUp 0.7s ease 0.2s both;
+  }
+
+  .examples-header { margin-bottom: 56px; }
+
+  .examples-title {
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  .examples-title em { font-style: italic; color: var(--gold); }
+
+  .examples-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border-light);
+    border: 1px solid var(--border-light);
+  }
+
+  .example-card {
+    background: var(--bg);
+    padding: 40px 32px;
+    transition: background 0.25s ease;
+    position: relative;
+  }
+
+  .example-card:hover { background: var(--surface2); }
+
+  .example-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.25s ease;
+    transform-origin: left;
+  }
+
+  .example-card:hover::before { transform: scaleX(1); }
+
+  .example-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    margin-bottom: 16px;
+  }
+
+  .example-title {
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+
+  .example-desc {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-mid);
+    line-height: 1.85;
+    font-weight: 300;
+  }
+
+  .example-tag {
+    display: inline-block;
+    margin-top: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-mid);
+    border: 1px solid var(--border-light);
+    padding: 5px 12px;
+  }
+
+  .how-section {
+    padding: 80px 48px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    animation: fadeUp 0.7s ease 0.3s both;
+  }
+
+  .how-left h2 {
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  .how-left h2 em { font-style: italic; color: var(--gold); }
+
+  .how-left p {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  .steps { display: flex; flex-direction: column; }
+
+  .step {
+    display: flex;
+    gap: 28px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+
+  .step:first-child { padding-top: 0; }
+  .step:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 28px;
+    color: var(--gold);
+    font-weight: 300;
+    flex-shrink: 0;
+    line-height: 1;
+    padding-top: 2px;
+    opacity: 0.7;
+  }
+
+  .step-content h3 {
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .step-content p {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-mid);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* BOOKING */
+  .booking-wrap { position: relative; }
+
+  .booking-wrap::before {
+    content: '';
+    display: block;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-light) 15%, var(--gold) 50%, var(--border-light) 85%, transparent);
+  }
+
+  .booking-glow {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 240px;
+    background: radial-gradient(ellipse at top, rgba(255,255,255,0.13) 0%, rgba(255,255,255,0.05) 35%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .booking-section {
+    padding: 96px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+    animation: fadeUp 0.7s ease 0.4s both;
+    position: relative;
+    z-index: 1;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.018) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  .booking-left h2 {
+    font-size: clamp(48px, 6vw, 80px);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.0;
+    margin-bottom: 28px;
+    color: var(--text);
+  }
+
+  .booking-left h2 em { font-style: italic; color: var(--gold); }
+
+  .booking-left p {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  .booking-right {
+    background: var(--surface2);
+    border: 1px solid var(--border-light);
+    padding: 48px;
+  }
+
+  .booking-form-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--text);
+    margin-bottom: 32px;
+    display: block;
+  }
+
+  .form-field { margin-bottom: 20px; }
+
+  .form-field label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-mid);
+    margin-bottom: 8px;
+  }
+
+  .form-field input,
+  .form-field textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border-light);
+    padding: 14px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .form-field input::placeholder,
+  .form-field textarea::placeholder { color: var(--text-dim); }
+
+  .form-field input:focus,
+  .form-field textarea:focus { border-color: var(--gold); }
+
+  .form-field textarea { resize: vertical; min-height: 90px; }
+
+  .form-field .field-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    letter-spacing: 0.08em;
+    font-style: italic;
+  }
+
+  .btn-book {
+    width: 100%;
+    margin-top: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    padding: 16px;
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-book:hover { opacity: 0.85; }
+
+  .gdpr-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    margin-top: 14px;
+    line-height: 1.7;
+  }
+
+  .gdpr-note a {
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .gdpr-note a:hover { text-decoration: underline; }
+
+  .form-success {
+    display: none;
+    text-align: center;
+    padding: 48px 0;
+  }
+
+  .form-success h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--text);
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+
+  .form-success p {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-mid);
+    line-height: 1.8;
+    margin-bottom: 24px;
+  }
+
+  .btn-calendar {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    padding: 14px 32px;
+    background: var(--gold);
+    color: var(--bg);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-calendar:hover { opacity: 0.85; }
+
+  .footer {
+    padding: 40px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-logo {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .footer-logo .free {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+    text-transform: none;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+  }
+
+  .footer-links { display: flex; gap: 32px; }
+
+  .footer-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .footer-links a:hover { color: var(--text); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    .header { padding: 20px 24px; }
+    .hero { grid-template-columns: 1fr; gap: 40px; padding: 64px 24px 56px; }
+    .ai-band { grid-template-columns: 1fr; gap: 32px; padding: 56px 24px; }
+    .what-section { padding: 56px 24px; }
+    .examples-section { padding: 56px 24px; }
+    .examples-grid { grid-template-columns: 1fr; }
+    .how-section { grid-template-columns: 1fr; gap: 48px; padding: 56px 24px; }
+    .booking-section { grid-template-columns: 1fr; gap: 48px; padding: 64px 24px; }
+    .booking-right { padding: 32px 24px; }
+    .footer { flex-direction: column; gap: 24px; padding: 32px 24px; text-align: center; }
+    .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">
+    Soph<span class="free">free</span> Automation
+    <span class="sub">Part of the Sophfree studio</span>
+  </div>
+  <a href="#book" class="header-cta">Let's talk</a>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-label">AI in your corner</div>
+      <h1>Stop repeating<br>yourself.<br><em>Start growing.</em></h1>
+    </div>
+    <div class="hero-right">
+      <p class="hero-desc">Every hour spent on admin, follow-ups, and tasks that go nowhere is an hour not spent on new customers, new revenue, and the version of your business you're actually building towards.</p>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-number">Days</div>
+          <div class="stat-label">Not weeks to build</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">Yours</div>
+          <div class="stat-label">You own it after</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ai-band-wrap">
+    <div class="glow-top"></div>
+    <section class="ai-band">
+      <div>
+        <div class="ai-band-label">On AI</div>
+        <h2>AI in your<br>corner — not<br><em>in your way</em></h2>
+      </div>
+      <div class="ai-band-body">
+        <p>There's a lot of noise around AI right now — most of it designed to make you feel behind or afraid. The reality is quieter than that.</p>
+        <br>
+        <p><strong>Used well, AI doesn't replace the human parts of your business.</strong> It handles the repetitive parts — the tasks that don't need your judgement, your relationships, or your expertise — so you can spend more time on the things that do.</p>
+        <br>
+        <p>Think of it less like a takeover and more like having something quietly capable working in the background. <strong>Your goals stay yours. The grunt work doesn't have to.</strong></p>
+      </div>
+    </section>
+  </div>
+
+  <section class="what-section">
+    <div class="section-eyebrow">What this is</div>
+    <p>A bespoke automation built around your specific problem. Not a template. Not a subscription. Something built for your business, handed over to you, and yours to run.</p>
+    <p>You tell me what's slowing you down. I build the workflow that handles it — and AI steps in where it genuinely adds value, so your time goes where it should.</p>
+  </section>
+
+  <section class="examples-section">
+    <div class="examples-header">
+      <h2 class="examples-title">Things I can <em>build for you</em></h2>
+    </div>
+    <div class="examples-grid">
+      <div class="example-card">
+        <div class="example-number">01</div>
+        <div class="example-title">Recruitment response automation</div>
+        <p class="example-desc">CV comes in, you add a quick note on fit, AI writes a warm considered response — genuinely personalised, not a template. Every candidate hears back. No one gets ghosted. And if they leave a review of their experience, a personal response goes back to them too — not the same line everyone else gets.</p>
+        <span class="example-tag">HR &amp; Recruitment</span>
+      </div>
+      <div class="example-card">
+        <div class="example-number">02</div>
+        <div class="example-title">Lead capture that actually follows up</div>
+        <p class="example-desc">Someone expresses interest, their details land where you need them instantly — ready to act on. No leads lost to an inbox you'll get to later. More time spent chasing the ones worth chasing.</p>
+        <span class="example-tag">Sales &amp; Growth</span>
+      </div>
+      <div class="example-card">
+        <div class="example-number">03</div>
+        <div class="example-title">Review requests that convert</div>
+        <p class="example-desc">Job done, the right ask goes out at the right moment — personalised to that client. And when they leave a review, they get a genuine personal response back. The kind that makes people feel remembered, not processed.</p>
+        <span class="example-tag">Reputation &amp; Growth</span>
+      </div>
+      <div class="example-card">
+        <div class="example-number">04</div>
+        <div class="example-title">Invoice chasing without the awkward</div>
+        <p class="example-desc">Overdue invoice triggers a polite, professional follow-up automatically. You get paid faster without writing the same uncomfortable email for the fifth time this month.</p>
+        <span class="example-tag">Finance &amp; Admin</span>
+      </div>
+      <div class="example-card">
+        <div class="example-number">05</div>
+        <div class="example-title">Booking confirmations that impress</div>
+        <p class="example-desc">Someone books, a personalised confirmation goes out instantly — with anything they need before you meet. No manual emails, no forgetting, no looking disorganised when you're anything but.</p>
+        <span class="example-tag">Client Experience</span>
+      </div>
+      <div class="example-card">
+        <div class="example-number">06</div>
+        <div class="example-title">Something else entirely</div>
+        <p class="example-desc">If you're doing something manually that feels like it shouldn't be — it probably shouldn't be. Tell me what it is and we'll work out whether automation is the right fix.</p>
+        <span class="example-tag">Bespoke</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-section">
+    <div class="how-left">
+      <h2>Simple from<br><em>start to finish</em></h2>
+      <p>No jargon. No ongoing retainer. No dependency on me after it's built. You walk away with something that works and that you own completely.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">i.</div>
+        <div class="step-content">
+          <h3>Tell me what's slowing you down</h3>
+          <p>A short call. We talk through what you're doing manually and whether automation is the right fix for it.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">ii.</div>
+        <div class="step-content">
+          <h3>I build it around your business</h3>
+          <p>Bespoke, built around your exact tools and process. You see it before it's finalised.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">iii.</div>
+        <div class="step-content">
+          <h3>It's handed over to you</h3>
+          <p>You own it. You run it. No monthly fee, no ongoing dependency on me to keep it going.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="booking-wrap">
+    <div class="booking-glow"></div>
+    <section class="booking-section" id="book">
+      <div class="booking-left">
+        <h2>You're<br><em>invited.</em></h2>
+        <p>A 20-minute call — no pressure, no pitch. Just an honest look at whether what you're doing manually could be automated, and what that would actually take.</p>
+      </div>
+      <div class="booking-right">
+        <span class="booking-form-label">You are invited</span>
+        <form id="bookingForm" onsubmit="handleSubmit(event)">
+          <div class="form-field">
+            <label>Your name</label>
+            <input type="text" id="fieldName" placeholder="First name is fine" required />
+          </div>
+          <div class="form-field">
+            <label>Email</label>
+            <input type="email" id="fieldEmail" placeholder="you@yourbusiness.com" required />
+          </div>
+          <div class="form-field">
+            <label>What are you trying to automate?</label>
+            <textarea id="fieldAutomate" placeholder="Even a rough idea is enough…"></textarea>
+          </div>
+          <div class="form-field">
+            <label>Which tools do you currently use?</label>
+            <input type="text" id="fieldTools" placeholder="e.g. Gmail, spreadsheets, Calendly…" />
+            <p class="field-note">If none — no shame.</p>
+          </div>
+          <button type="submit" class="btn-book">Here's my RSVP →</button>
+          <p class="gdpr-note">By submitting this form you agree to being contacted about your enquiry. Your details will not be shared with third parties. Read our <a href="privacy.html">Privacy Policy</a>.</p>
+        </form>
+        <div class="form-success" id="formSuccess">
+          <h3>RSVP received.</h3>
+          <p>I'll be in touch within 24 hours.<br>In the meantime, feel free to grab a time directly.</p>
+          <a class="btn-calendar" href="https://calendar.app.google/mi2jhSQuERCozmX37" target="_blank" rel="noopener">Pick a time →</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-logo">Soph<span class="free">free</span></div>
+  <div class="footer-links">
+    <a href="https://contentglitch404.com">Contentglitch404</a>
+    <a href="privacy.html">Privacy &amp; AI</a>
+    <a href="mailto:sophie@sophfree.com">sophie@sophfree.com</a>
+  </div>
+</footer>
+
+<script>
+function handleSubmit(e) {
+  e.preventDefault();
+
+  const name    = document.getElementById('fieldName').value;
+  const email   = document.getElementById('fieldEmail').value;
+  const automate = document.getElementById('fieldAutomate').value;
+  const tools   = document.getElementById('fieldTools').value;
+
+  const subject = encodeURIComponent('Sophfree Automation — RSVP from ' + name);
+  const body = encodeURIComponent(
+    'Name: ' + name + '\n' +
+    'Email: ' + email + '\n\n' +
+    'What they want to automate:\n' + automate + '\n\n' +
+    'Tools they use:\n' + (tools || 'None mentioned')
+  );
+
+  window.location.href = 'mailto:sophie@sophfree.com?subject=' + subject + '&body=' + body;
+
+  // Show success state after a short delay
+  setTimeout(() => {
+    document.getElementById('bookingForm').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  }, 800);
+}
+</script>
+
+</body>
+</html>

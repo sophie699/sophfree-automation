@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy, Data &amp; AI — Sophfree Automation</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e1420;
+    --surface: #111826;
+    --surface2: #141d2e;
+    --border: #1e2a40;
+    --border-light: #2d3f58;
+    --text: #f0ece6;
+    --text-mid: #c8c2b8;
+    --text-dim: #8a96a8;
+    --gold: #c9a96e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 28px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(14,20,32,0.97);
+    backdrop-filter: blur(12px);
+  }
+
+  .logo {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text);
+    text-decoration: none;
+    line-height: 1.4;
+  }
+
+  .logo .free {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+    text-transform: none;
+    letter-spacing: 0.04em;
+    font-size: 17px;
+  }
+
+  .logo .sub {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: #7a8699;
+    margin-top: 3px;
+    font-weight: 300;
+    text-transform: uppercase;
+  }
+
+  .back-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover { color: var(--text); }
+
+  .page-hero {
+    padding: 72px 48px 56px;
+    border-bottom: 1px solid var(--border);
+    animation: fadeUp 0.8s ease forwards;
+  }
+
+  .page-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .page-eyebrow::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .page-hero h1 {
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+
+  .page-hero h1 em { font-style: italic; color: var(--gold); }
+
+  .page-hero p {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.8;
+    max-width: 600px;
+  }
+
+  .content {
+    max-width: 780px;
+    padding: 72px 48px 96px;
+    animation: fadeUp 0.7s ease 0.1s both;
+  }
+
+  .policy-section {
+    margin-bottom: 64px;
+  }
+
+  .policy-section:last-child { margin-bottom: 0; }
+
+  .policy-section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .policy-section h2 {
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--text);
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+
+  .policy-section h2 em { font-style: italic; color: var(--gold); }
+
+  .policy-section p {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.9;
+    font-weight: 300;
+    margin-bottom: 16px;
+  }
+
+  .policy-section p:last-child { margin-bottom: 0; }
+
+  .policy-section p strong {
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  .policy-section a {
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .policy-section a:hover { text-decoration: underline; }
+
+  .updated {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 56px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .footer {
+    padding: 40px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-logo {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .footer-logo .free {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+    text-transform: none;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+  }
+
+  .footer-links { display: flex; gap: 32px; }
+
+  .footer-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .footer-links a:hover { color: var(--text); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    .header { padding: 20px 24px; }
+    .page-hero { padding: 48px 24px 40px; }
+    .content { padding: 48px 24px 72px; }
+    .footer { flex-direction: column; gap: 24px; padding: 32px 24px; text-align: center; }
+    .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a class="logo" href="index.html">
+    Soph<span class="free">free</span> Automation
+    <span class="sub">Part of the Sophfree studio</span>
+  </a>
+  <a class="back-link" href="index.html">← Back</a>
+</header>
+
+<main>
+
+  <div class="page-hero">
+    <div class="page-eyebrow">Legal &amp; transparency</div>
+    <h1>Privacy, Data<br>&amp; <em>AI</em></h1>
+    <p>How your data is handled, what rights you have, and how AI is used in the services offered by Sophfree Automation.</p>
+  </div>
+
+  <div class="content">
+
+    <p class="updated">Last updated: April 2025</p>
+
+    <div class="policy-section">
+      <div class="policy-section-label">Who we are</div>
+      <h2>About <em>Sophfree</em></h2>
+      <p>Sophfree Automation is a trading name of Sophie Sherwin, a sole trader registered in England and Wales. For any data-related enquiries, contact <a href="mailto:sophie@sophfree.com">sophie@sophfree.com</a>.</p>
+      <p>We are registered with the Information Commissioner's Office (ICO) as required under UK data protection law.</p>
+    </div>
+
+    <div class="policy-section">
+      <div class="policy-section-label">Your data</div>
+      <h2>What we collect &amp; <em>why</em></h2>
+      <p><strong>Enquiry data:</strong> When you submit the contact form on this website, we collect your name, email address, and the details you provide about your business and automation needs. This information is used solely to respond to your enquiry and discuss whether we can work together.</p>
+      <p><strong>Call recordings:</strong> Discovery calls may be recorded for the purpose of accurately understanding your requirements. You will be informed at the start of any call if it is being recorded and can decline. Recordings are not shared with third parties and are deleted once they have served their purpose.</p>
+      <p><strong>What we do not do:</strong> We do not sell your data. We do not share it with third parties for marketing purposes. We do not use tracking scripts, advertising pixels, or analytics tools on this website.</p>
+    </div>
+
+    <div class="policy-section">
+      <div class="policy-section-label">Legal basis</div>
+      <h2>UK GDPR &amp; <em>your rights</em></h2>
+      <p>We process your personal data on the basis of legitimate interest — specifically, to respond to an enquiry you have initiated — and, where relevant, on the basis of contract where we are working together.</p>
+      <p>Under UK GDPR you have the right to access the personal data we hold about you, request its correction or deletion, object to its processing, and request that we restrict how we use it. To exercise any of these rights, contact <a href="mailto:sophie@sophfree.com">sophie@sophfree.com</a> and we will respond within 30 days.</p>
+      <p>If you have a concern about how your data is handled that we are unable to resolve, you have the right to lodge a complaint with the <a href="https://ico.org.uk" target="_blank" rel="noopener">Information Commissioner's Office</a>.</p>
+    </div>
+
+    <div class="policy-section">
+      <div class="policy-section-label">Data retention</div>
+      <h2>How long we keep <em>your data</em></h2>
+      <p>Enquiry data is retained for as long as is necessary to respond to and follow up on your enquiry — typically no longer than 12 months if no working relationship is established. If we work together, data relevant to the project may be retained for up to 6 years in line with standard UK business record-keeping obligations.</p>
+      <p>You may request deletion of your data at any time by emailing <a href="mailto:sophie@sophfree.com">sophie@sophfree.com</a>.</p>
+    </div>
+
+    <div class="policy-section">
+      <div class="policy-section-label">EU AI Act — Transparency statement</div>
+      <h2>How AI is used in <em>our services</em></h2>
+      <p>Sophfree Automation builds workflow automations that may incorporate artificial intelligence tools — primarily large language models (LLMs) such as those provided by Anthropic (Claude) and OpenAI — to automate tasks such as generating personalised written responses, categorising data, and drafting communications on behalf of our clients.</p>
+      <p><strong>In line with the EU AI Act and the principle of transparency, we disclose the following:</strong></p>
+      <p><strong>AI is used as a tool, not a decision-maker.</strong> In all automations built by Sophfree Automation, AI-generated outputs are the result of instructions and parameters set by a human. Where AI generates content that is sent to a third party (for example, a personalised email response), the automation is designed and approved by the client business before deployment.</p>
+      <p><strong>No high-risk AI systems.</strong> The automations we build do not fall within the categories of high-risk AI systems as defined in Annex III of the EU AI Act. We do not build systems that make consequential decisions about individuals in areas such as employment, creditworthiness, law enforcement, or access to essential services without human oversight.</p>
+      <p><strong>Human oversight is maintained.</strong> Clients who commission automations from Sophfree Automation retain full control over and responsibility for the systems they operate after handover. We design all systems with clear points at which a human can review, override, or intervene.</p>
+      <p><strong>AI-generated content disclosure.</strong> Where automations generate content that interacts with members of the public — such as personalised email responses — we recommend that our clients include appropriate disclosure where required by applicable law.</p>
+      <p>If you have questions about how AI is used in a specific automation or project, please contact <a href="mailto:sophie@sophfree.com">sophie@sophfree.com</a>.</p>
+    </div>
+
+    <div class="policy-section">
+      <div class="policy-section-label">Cookies</div>
+      <h2>Cookies &amp; <em>tracking</em></h2>
+      <p>This website does not use cookies, analytics scripts, advertising trackers, or any other third-party tracking technology. No data about your visit is collected beyond what you voluntarily submit through the contact form.</p>
+    </div>
+
+    <div class="policy-section">
+      <div class="policy-section-label">Changes</div>
+      <h2>Updates to this <em>policy</em></h2>
+      <p>We may update this page from time to time to reflect changes in the law or our practices. The date at the top of this page indicates when it was last revised. Continued use of this website following any update constitutes acceptance of the revised policy.</p>
+    </div>
+
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-logo">Soph<span class="free">free</span></div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="https://contentglitch404.com">Contentglitch404</a>
+    <a href="mailto:sophie@sophfree.com">sophie@sophfree.com</a>
+  </div>
+</footer>
+
+</body>
+</html>
